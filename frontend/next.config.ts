@@ -2,10 +2,11 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    const adminUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL;
-
-    // যদি Environment Variable সেট না থাকে তবে কোনো rewrite করবে না
-    if (!adminUrl) return [];
+    // Vercel-এ Variable না থাকলেও এটি সরাসরি আসল URL নিবে
+    const rawUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'https://maheen-accessories.vercel.app';
+    
+    // নিশ্চিত করছে URL-এর শুরুতে https:// আছে কি না
+    const adminUrl = rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`;
 
     return [
       {
